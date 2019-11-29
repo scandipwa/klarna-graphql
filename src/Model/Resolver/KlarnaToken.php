@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ScandiPWA\KlarnaGraphQl\Model\Resolver;
 
 use Klarna\Core\Api\BuilderInterface;
+use Klarna\Core\Exception;
 use Klarna\Kp\Api\CreditApiInterface;
 use Klarna\Kp\Api\Data\ResponseInterface;
 use Klarna\Kp\Api\QuoteInterface;
@@ -36,26 +37,32 @@ class KlarnaToken implements ResolverInterface
      * @var CreditApiInterface
      */
     protected $api;
+
     /**
      * @var BuilderInterface
      */
     protected $builder;
+
     /**
      * @var QuoteFactory
      */
     protected $quoteFactory;
+
     /**
      * @var CartManagementInterface
      */
     protected $quoteManagement;
+
     /**
      * @var QuoteRepositoryInterface
      */
     protected $kQuoteRepository;
+
     /**
      * @var ParamOverriderCustomerId
      */
     protected $overriderCustomerId;
+
     /**
      * @var GuestCartRepositoryInterface
      */
@@ -112,6 +119,7 @@ class KlarnaToken implements ResolverInterface
      * @param ResponseInterface $klarnaResponse
      * @param CartInterface $cart
      * @return QuoteInterface
+     * @throws GraphQlInputException
      */
     protected function generateKlarnaQuote(ResponseInterface $klarnaResponse, CartInterface $cart): QuoteInterface
     {
@@ -136,6 +144,7 @@ class KlarnaToken implements ResolverInterface
      * @param ResponseInterface $klarnaResponse
      * @param CartInterface $cart
      * @return QuoteInterface
+     * @throws GraphQlInputException
      */
     protected function createNewQuote(ResponseInterface $klarnaResponse, CartInterface $cart): QuoteInterface
     {
@@ -158,7 +167,7 @@ class KlarnaToken implements ResolverInterface
     }
 
     /**
-     * @param $quoteData
+     * @param $categories
      * @return mixed
      */
     private function extractPaymentMethods($categories)
@@ -172,6 +181,8 @@ class KlarnaToken implements ResolverInterface
 
     /**
      * @param CartInterface $cart
+     * @return array
+     * @throws Exception
      */
     protected function getGeneratedCreateRequest(CartInterface $cart)
     {
@@ -185,6 +196,7 @@ class KlarnaToken implements ResolverInterface
      *
      * @param array $input
      * @return CartInterface
+     * @throws GraphQlInputException
      */
     protected function getCart(array $input = []): CartInterface
     {
