@@ -1,6 +1,5 @@
 {
     "name": "scandipwa/klarna-graphql",
-    "version": "3.0.0",
     "description": "ScandiPWA GraphQl extend for Klarna",
     "keywords": [
         "magento2",
