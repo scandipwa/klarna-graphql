@@ -293,13 +293,21 @@ class Kasper extends Builder
             'locale',
             'order_amount',
             'orderlines',
-            'merchant_urls'
+            'merchant_urls',
+            'billing_address',
+            'shipping_address'
         ];
 
         /** @var Quote $quote */
         $quote = $this->getObject();
         $store = $quote->getStore();
         $address = $quote->isVirtual() ? $quote->getBillingAddress() : $quote->getShippingAddress();
+
+        /**
+         * Get customer addresses (shipping and billing)
+         */
+        $this->addBillingAddress($this->getAddressData($quote, Address::TYPE_BILLING));
+        $this->addShippingAddress($this->getAddressData($quote, Address::TYPE_SHIPPING));
 
         $tax = $address->getBaseTaxAmount();
         if ($this->configHelper->isFptEnabled($store) && !$this->configHelper->getDisplayInSubtotalFpt($store)) {
@@ -308,11 +316,11 @@ class Kasper extends Builder
         }
 
         $this->requestBuilder->setPurchaseCountry($this->directoryHelper->getDefaultCountry($store))
-            ->setPurchaseCurrency($quote->getStore()->getBaseCurrencyCode())
+            ->setPurchaseCurrency($quote->getBaseCurrencyCode())
             ->setLocale(str_replace('_', '-', $this->configHelper->getLocaleCode()))
-            ->setOrderAmount((int) $this->dataConverter->toApiFloat($address->getBaseGrandTotal()))
+            ->setOrderAmount((int)$this->dataConverter->toApiFloat($address->getBaseGrandTotal()))
             ->addOrderlines($this->getOrderLines($quote->getStore()))
-            ->setOrderTaxAmount((int) $this->dataConverter->toApiFloat($tax))
+            ->setOrderTaxAmount((int)$this->dataConverter->toApiFloat($tax))
             ->setMerchantUrls($this->processMerchantUrls())
             ->setMerchantReferences($this->getMerchantReferences($quote))
             ->validate($requiredAttributes, self::GENERATE_TYPE_PLACE);
