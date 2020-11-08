@@ -318,9 +318,9 @@ class Kasper extends Builder
         $this->requestBuilder->setPurchaseCountry($this->directoryHelper->getDefaultCountry($store))
             ->setPurchaseCurrency($quote->getBaseCurrencyCode())
             ->setLocale(str_replace('_', '-', $this->configHelper->getLocaleCode()))
-            ->setOrderAmount((int)$this->dataConverter->toApiFloat($address->getBaseGrandTotal()))
+            ->setOrderAmount((int) $this->dataConverter->toApiFloat($address->getBaseGrandTotal()))
             ->addOrderlines($this->getOrderLines($quote->getStore()))
-            ->setOrderTaxAmount((int)$this->dataConverter->toApiFloat($tax))
+            ->setOrderTaxAmount((int) $this->dataConverter->toApiFloat($tax))
             ->setMerchantUrls($this->processMerchantUrls())
             ->setMerchantReferences($this->getMerchantReferences($quote))
             ->validate($requiredAttributes, self::GENERATE_TYPE_PLACE);
