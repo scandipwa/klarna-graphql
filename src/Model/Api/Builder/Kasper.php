@@ -293,9 +293,7 @@ class Kasper extends Builder
             'locale',
             'order_amount',
             'orderlines',
-            'merchant_urls',
-            'billing_address',
-            'shipping_address'
+            'merchant_urls'
         ];
 
         /** @var Quote $quote */
@@ -306,8 +304,7 @@ class Kasper extends Builder
         /**
          * Get customer addresses (shipping and billing)
          */
-        $this->addBillingAddress($this->getAddressData($quote, Address::TYPE_BILLING));
-        $this->addShippingAddress($this->getAddressData($quote, Address::TYPE_SHIPPING));
+        $this->prefillAddresses($quote, $store);
 
         $tax = $address->getBaseTaxAmount();
         if ($this->configHelper->isFptEnabled($store) && !$this->configHelper->getDisplayInSubtotalFpt($store)) {
